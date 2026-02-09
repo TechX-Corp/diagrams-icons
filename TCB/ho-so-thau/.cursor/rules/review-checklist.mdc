@@ -1,0 +1,113 @@
+---
+description: GPT review checklist for Phase 2 document review
+globs:
+alwaysApply: true
+---
+
+# Document Review Checklist
+
+## When to Activate
+This rule applies when the user asks to REVIEW a document or executes a Phase 2 handoff file.
+
+## Review Workflow
+1. ALWAYS read the REVIEW version (*_REVIEW.*) from output/ using MCP read_document()
+2. Use the review tracking to understand what was changed:
+   - Word: scan inline comments and highlighted text first
+   - Excel: check _Change_Log sheet and audit columns first
+   - PPT: read speaker notes change tracking first
+3. Also render to PNG and visually inspect with read_image()
+4. Evaluate against 4 categories below (including tracking quality)
+5. Write structured report to review/review_report.md
+
+## Review Categories
+
+### A. Content Quality
+- [ ] All required sections present for document type
+- [ ] Information is accurate and consistent
+- [ ] No placeholder text or TODO markers remaining
+- [ ] No {{IMAGE:...}} placeholders remaining
+- [ ] Data from source files correctly transferred
+- [ ] Logical flow between sections
+- [ ] Executive summary matches detailed content
+
+### B. Formatting (check applicable format)
+
+**Word (.docx):**
+- [ ] Fonts match standards (Times New Roman 13pt body)
+- [ ] Heading hierarchy correct (H1 > H2 > H3)
+- [ ] Heading numbering consistent (1. / 1.1. / 1.1.1.)
+- [ ] Table formatting (borders, alignment, header rows)
+- [ ] Margins correct (3cm left, 2cm others)
+- [ ] Line spacing 1.5, page numbers, headers/footers, TOC
+- [ ] Images positioned correctly
+
+**Excel (.xlsx):**
+- [ ] Header rows formatted (bold, dark bg, frozen panes)
+- [ ] Number formats correct (currency VND, dates dd/mm/yyyy)
+- [ ] Column widths appropriate, no text overflow
+- [ ] Formulas work (no #REF!, #DIV/0!, #VALUE! errors)
+- [ ] Totals sum correctly, cross-sheet references valid
+- [ ] Print area set, sheets named descriptively
+- [ ] Conditional formatting applied where appropriate
+
+**PowerPoint (.pptx):**
+- [ ] Slide layout consistent (16:9 widescreen)
+- [ ] Font sizes readable (title 28pt, body 18pt)
+- [ ] Max 6 bullets per slide, concise text
+- [ ] Images/diagrams centered, not exceeding 80% slide area
+- [ ] Slide numbers present, company logo on master
+- [ ] Speaker notes present for each content slide
+- [ ] Consistent color scheme throughout
+
+**Cross-format consistency:**
+- [ ] Pricing matches between Word proposal and Excel sheet
+- [ ] Key points align between Word document and PowerPoint slides
+- [ ] Author metadata set correctly in all files
+
+### C. Language
+- [ ] Grammar correct (Vietnamese and/or English)
+- [ ] Spelling correct
+- [ ] Professional tone maintained
+- [ ] Terminology consistent throughout
+- [ ] No machine-translation artifacts
+- [ ] Abbreviations defined on first use
+
+### D. Review Tracking Quality
+- [ ] All new/modified content is properly tracked (no untracked changes)
+- [ ] Comments are descriptive (not just "changed this")
+- [ ] Word: highlights match actual changes (green=new, yellow=modified)
+- [ ] Word: Change Log page is accurate and complete
+- [ ] Excel: Audit columns filled for every affected row
+- [ ] Excel: Row colors match status (green=new, yellow=modified)
+- [ ] Excel: _Change_Log sheet matches actual changes
+- [ ] PPT: Speaker notes have change tracking for every modified slide
+- [ ] PPT: Change Summary slide is accurate
+- [ ] Tracking would be understandable to a reviewer who has never seen the original
+
+## Review Report Format (review/review_report.md)
+
+Each finding must include:
+- ID: REV-001, REV-002, etc.
+- Severity: CRITICAL / HIGH / MEDIUM / LOW
+- Category: Content / Format / Language / Tracking
+- Location: Page/section/cell/slide reference
+- Issue: Description of the problem
+- Suggestion: How to fix it
+
+## Severity Definitions
+- CRITICAL: Document cannot be submitted (missing sections, wrong data)
+- HIGH: Significant quality issue (formatting broken, major grammar)
+- MEDIUM: Noticeable but not blocking (minor style inconsistency)
+- LOW: Nice to have (wording improvement, minor spacing)
+
+## CRITICAL: Generate Phase 3 Handoff File
+
+After writing the review report, you MUST:
+1. Save the review report to review/review_report.md
+2. Create tmp/handoff/phase3.md with:
+   - Summary of review findings (counts by severity)
+   - All CRITICAL and HIGH items listed with REV-xxx IDs
+   - @file references to all output files that need fixing
+   - Specific locations (page, section, cell, slide)
+   - Reference to @review/review_report.md for full details
+3. Tell user: "Open NEW chat, select Opus 4.6, type: Execute @tmp/handoff/phase3.md"

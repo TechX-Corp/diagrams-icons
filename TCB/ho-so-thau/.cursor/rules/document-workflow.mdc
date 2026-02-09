@@ -1,0 +1,199 @@
+---
+description: Master orchestration for 4-phase document processing workflow
+globs:
+alwaysApply: true
+---
+
+# Document Processing Workflow
+
+## CRITICAL: Phase Handoff Protocol (@file Reference)
+
+At the END of every phase, you MUST:
+1. Summarize what was done (files created/modified, stats)
+2. Create the next handoff file with COMPLETE context
+3. Save to tmp/handoff/phaseXX.md (e.g., phase1b.md, phase2.md, phase3.md)
+4. Archive previous handoff (if exists) to tmp/handoff/history/ with timestamp
+5. Tell user the EXACT command to type in the next chat
+
+Handoff file format:
+```
+# Handoff: Phase [N+1] ([PHASE NAME])
+## Select Model: [MODEL NAME]
+## Previous Phase Summary
+[what was done, files created, stats]
+## Tasks for This Phase
+[numbered list of specific tasks with @file references]
+## Files to Reference
+[list of @output/ and @review/ files]
+## After This Phase
+[what handoff to generate next]
+```
+
+Chat output format:
+```
+Phase [N] COMPLETE. [brief summary]
+Files: [list]
+>>> Open NEW chat, select [MODEL NAME], type:
+    Execute @tmp/handoff/phaseXX.md
+```
+
+## Handoff File Detection
+
+When user message contains "Execute @tmp/handoff/" or references a handoff file:
+1. Read the handoff file completely
+2. Identify which phase this is (from the file header)
+3. Execute ALL tasks listed in the file
+4. At the end, generate the NEXT handoff file
+5. Tell user the next step
+
+When generating handoff files:
+1. Use standard format (# Handoff: Phase XX)
+2. Include COMPLETE context (the next model has zero prior context)
+3. Use @file references for all document paths
+4. Save to tmp/handoff/phaseXX.md
+5. Archive previous handoff to tmp/handoff/history/
+
+## Available Tools Reference
+
+### Reading & Extraction
+- MCP `read_document(file_path, file_type)` - Read any document
+- MCP `read_image(file_path)` - View rendered/extracted images
+- MCP `convert_to_markdown(uri)` - Convert document to markdown
+- Skill: doc - Auto-triggers for .docx tasks
+- Skill: pdf - Auto-triggers for .pdf tasks
+- Skill: spreadsheet - Auto-triggers for .xlsx tasks
+- Script: scripts/extract_images.py - Extract images from docx/pdf
+
+### Diagram Generation
+- MCP `generate_diagram(code)` - Architecture/flow/sequence diagrams
+- Skill: generate-architecture-diagrams - AWS/Azure/GCP + Draw.io
+- Built-in: GenerateImage - Conceptual/custom visuals
+
+### Document Assembly (all 3 formats)
+- Script: scripts/template_engine.py - Fill templates (.docx/.xlsx/.pptx)
+- Script: scripts/insert_images.py - Insert images into any format
+- Script: scripts/word_formatter.py - Format .docx + review tracking
+- Script: scripts/xlsx_formatter.py - Format .xlsx + audit columns
+- Script: scripts/pptx_builder.py - Create/edit .pptx + notes tracking
+- Script: scripts/render_docs.py - Render any format to PNG
+- Script: scripts/strip_tracking.py - Create CLEAN from REVIEW version
+
+## Folder Conventions
+- input/          : Source files (user places here)
+- output/         : Generated documents (agent places here)
+                    *_REVIEW.* = with tracking, *.* = clean for client
+- review/         : Review reports (GPT places here)
+- tmp/handoff/    : Structured handoff files for @file reference
+- tmp/images/     : Extracted images from input files
+- tmp/diagrams/   : Generated diagrams before insertion
+- tmp/renders/    : Rendered PNG pages for visual QA
+
+## Author Tracking
+
+Read config.yaml for author info. If not found, ask user for name.
+Every document modification must record:
+- Author name (from config.yaml)
+- Model used (the model you are)
+- Phase (Phase 1/1b/2/3)
+- Timestamp
+- Description of change
+
+## Phase 1: CREATE Workflow (Model: Opus 4.6)
+
+### Step 1: Analyze Input
+- Scan input/ folder OR read @referenced files
+- Use MCP read_document() for content preview
+- Use convert_to_markdown() for structured view
+- Run extract_images.py to pull images from docx/pdf into tmp/images/
+- Use read_image() to view extracted images and understand their content
+- Summarize available data AND images per file
+
+### Step 2: Identify Document Type
+- Check if user specified a template
+- Match input content to document types in document-types.mdc
+- Determine output format(s): .docx, .xlsx, .pptx, or combination
+
+### Step 3: Plan Content Structure
+- Map input data to template placeholders
+- Identify what content goes where
+- Note where images/diagrams are needed (use {{IMAGE:name}} placeholders)
+- For images that need code-based generation: plan diagram code
+- For images that need AI generation: mark as {{IMAGE:name}} for Phase 1b
+
+### Step 4: Generate Diagrams (if needed)
+- For architecture diagrams: use MCP generate_diagram()
+- For complex infra diagrams: use architecture-diagrams skill
+- For conceptual/custom visuals: mark as {{IMAGE:name}} for Gemini in Phase 1b
+- Save all code-generated diagrams to tmp/diagrams/
+- Use read_image() to verify diagram quality
+- Iterate until diagrams look correct
+
+### Step 5: Assemble Document (any format)
+- Template mode: run scripts/template_engine.py
+- Edit mode: use doc/spreadsheet skill or pptx_builder.py directly
+- Run insert_images.py to place images/diagrams at correct positions
+- Apply formatting: run word_formatter.py / xlsx_formatter.py / pptx_builder.py
+- CRITICAL: Track all changes as you work, maintain a changes manifest:
+  - What was added (new content, new rows, new slides)
+  - What was modified (changed text, updated cells, edited slides)
+  - Source of each change (which input file, which page/cell/slide)
+  - Pass this manifest to the formatter scripts for review tracking
+
+### Step 6: Apply Review Tracking + Create Dual Versions
+- Run formatter with review tracking enabled:
+  - Word: comments, highlights (green=new, yellow=modified), section markers, change log page
+  - Excel: audit columns (_Status, _Change_Desc, _Updated_By), row colors, _Change_Log sheet
+  - PPT: speaker notes tracking, footer annotations, change summary slide
+- Save as REVIEW version: output/filename_REVIEW.ext
+- Run scripts/strip_tracking.py to create CLEAN version: output/filename.ext
+- Both versions should exist in output/
+
+### Step 7: Visual QA Loop
+- Run scripts/render_docs.py -> PNG pages (render REVIEW version)
+- Use MCP read_image() to inspect each page
+- Verify: images positioned, text flows, tracking is visible and correct
+- Fix issues, re-render, repeat until clean
+
+### Step 8: Deliver Draft + Generate Handoff File
+- Both REVIEW and CLEAN versions saved in output/
+- Clean up tmp/ files (keep tmp/handoff/)
+- Report changes made (files, page counts, tables, images, tracking stats)
+- Determine next phase:
+  - If {{IMAGE:...}} placeholders remain -> create tmp/handoff/phase1b.md (for Gemini 3 Pro)
+  - If no images needed -> create tmp/handoff/phase2.md (for GPT-5.2 High)
+- Tell user: "Open NEW chat, select [MODEL], type: Execute @tmp/handoff/phaseXX.md"
+- Tell reviewer: "Review the *_REVIEW version for change tracking"
+
+## Phase 3: FIX Workflow (Model: Opus 4.6, after GPT review)
+
+### Step 1: Read Review Report
+- Read review/review_report.md
+- List all findings with severity
+- Ask user which items to fix (or fix all CRITICAL + HIGH by default)
+
+### Step 2: Apply Fixes
+- Fix selected items using doc skill / python-docx / openpyxl / python-pptx
+- Re-apply formatting if needed
+- Update review tracking: Add new comments/audit entries for fixes
+  - Word: new comment "[PHASE 3] Fixed per REV-xxx: ..."
+  - Excel: update _Status to "FIXED", update _Change_Desc
+  - PPT: update speaker notes with fix description
+
+### Step 3: Re-generate Dual Versions
+- Update REVIEW version with fix tracking
+- Re-run strip_tracking.py to regenerate CLEAN version
+- Both versions now reflect all fixes
+
+### Step 4: Re-render and QA
+- Run render_docs.py on REVIEW version
+- Inspect all pages -- verify fixes are correct AND tracking is updated
+- Verify CLEAN version has no tracking artifacts
+
+### Step 5: Deliver Final + Handoff
+- Both output/filename_REVIEW.ext and output/filename.ext updated
+- Update review report with fix status (mark items as FIXED)
+- Update author tracking metadata
+- Clean up tmp/ files (except handoff/)
+- Generate final summary (no more phases needed)
+- If user requested another iteration, generate Phase 2 prompt again
+- Tell user: "Send CLEAN version to client, keep REVIEW version for records"

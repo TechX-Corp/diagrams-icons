@@ -1,0 +1,20 @@
+# Personal configuration - copy to config.yaml and edit
+# This file is git-ignored (personal to each team member)
+
+author:
+  name: "Your Name"
+  role: "Technical Lead"
+  team: "Solutions Architecture"
+
+# Default model preferences (override per-phase if needed)
+models:
+  phase1_create: "Opus 4.6"
+  phase1b_images: "Gemini 3 Pro"
+  phase2_review: "GPT-5.2 High"
+  phase3_fix: "Opus 4.6"
+  quick_edit: "Opus 4.6 Fast"
+
+# Company branding
+branding:
+  company_name: "Your Company"
+  logo_path: "input/logo.png"  # optional

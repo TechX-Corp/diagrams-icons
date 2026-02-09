@@ -1,0 +1,43 @@
+# Personal config
+config.yaml
+
+# Working directories (each person's own files)
+input/
+output/
+review/
+tmp/
+chat/
+
+# Keep directory structure via .gitkeep
+!input/.gitkeep
+!output/.gitkeep
+!review/.gitkeep
+!tmp/.gitkeep
+!tmp/handoff/.gitkeep
+!tmp/handoff/history/.gitkeep
+!tmp/renders/.gitkeep
+!tmp/images/.gitkeep
+!tmp/diagrams/.gitkeep
+!chat/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Plan files (kept in .cursor/plans/ already)
+# PLAN.md is committed as reference

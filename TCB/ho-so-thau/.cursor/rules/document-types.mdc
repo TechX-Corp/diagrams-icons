@@ -1,0 +1,106 @@
+---
+description: Per-type document handling for proposals, reports, presentations, and more
+globs:
+alwaysApply: true
+---
+
+# Document Types and Templates
+
+## How to Identify Document Type
+
+Match user request or input content to the most appropriate type below.
+If unclear, ask the user before proceeding.
+
+## Word Document Types
+
+### Proposal / Hồ sơ thầu
+- Template: templates/word/proposal_template.docx
+- Required sections:
+  1. Cover Page (company logo, project name, date, prepared by)
+  2. Table of Contents
+  3. Executive Summary / Tóm tắt
+  4. Company Profile / Giới thiệu công ty
+  5. Understanding of Requirements / Hiểu biết yêu cầu
+  6. Technical Solution / Giải pháp kỹ thuật ({{IMAGE:architecture_diagram}})
+  7. Implementation Timeline / Lộ trình triển khai
+  8. Pricing Summary / Tóm tắt giá (reference Excel pricing sheet)
+  9. Team / Đội ngũ dự án
+  10. Appendix / Phụ lục
+- Language: Vietnamese (technical terms in English OK)
+- Cross-reference: pricing must match Excel pricing sheet
+
+### Technical Report / Báo cáo kỹ thuật
+- Template: templates/word/technical_report_template.docx
+- Required sections:
+  1. Cover Page
+  2. Table of Contents
+  3. Executive Summary
+  4. Background / Context
+  5. Methodology
+  6. Findings / Analysis ({{IMAGE:system_diagram}})
+  7. Recommendations
+  8. Appendix
+- Language: Vietnamese or English (follow input language)
+
+## Excel Document Types
+
+### Pricing Sheet / Bảng giá
+- Template: templates/excel/pricing_template.xlsx
+- Required sheets:
+  - Cover (project info, dates, version)
+  - Item Breakdown (line items with Qty, Unit Price, Total)
+  - Summary (totals, taxes, grand total with formulas)
+  - Terms (payment terms, validity, notes)
+- Formulas: SUM for totals, VLOOKUP for cross-references
+- Currency: VND format (#,##0 VND)
+- Cross-reference: totals must match Word proposal section
+
+### Data Report / Báo cáo dữ liệu
+- Template: templates/excel/data_report_template.xlsx
+- Required sheets:
+  - Dashboard (KPIs, summary charts)
+  - Raw Data (source data, timestamped)
+  - Analysis (pivot tables, calculated metrics)
+  - Summary (key findings, trends)
+
+## PowerPoint Document Types
+
+### Presentation / Bài thuyết trình
+- Template: templates/pptx/presentation_template.pptx
+- Required slides:
+  1. Title (project name, company, date, presenter)
+  2. Agenda
+  3. Executive Summary (3-5 key points)
+  4. Solution Overview ({{IMAGE:architecture_diagram}})
+  5. Implementation Timeline
+  6. Key Metrics / Benefits
+  7. Team Introduction
+  8. Q&A / Thank You
+- Speaker notes: required for every content slide
+- Cross-reference: key points must match Word proposal
+
+### Executive Brief / Tóm tắt điều hành
+- Template: templates/pptx/executive_brief_template.pptx
+- Required slides:
+  1. Title
+  2. Key Highlights (3-4 bullets max)
+  3. Solution (1 slide, visual-heavy)
+  4. Investment Summary (from Excel pricing)
+  5. Recommendation / Next Steps
+- Concise: maximum 5 slides
+- Visual-heavy: prefer diagrams over text
+
+## Multi-Format Packages
+
+### Full Tender Package
+When user requests a complete bid/tender, generate ALL THREE:
+1. **Word**: Proposal document (detailed)
+2. **Excel**: Pricing sheet (structured data)
+3. **PowerPoint**: Presentation (executive summary)
+- Ensure cross-format consistency (pricing, key points, dates)
+- Review all three together in Phase 2
+
+### Project Report Package
+1. **Word**: Detailed project report
+2. **Excel**: Data analysis and metrics
+3. **PowerPoint**: Executive summary presentation

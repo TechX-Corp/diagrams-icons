@@ -1,0 +1,12 @@
+services:
+  renderer:
+    build: .
+    container_name: ho-so-thau-renderer
+    volumes:
+      - ./input:/app/input:ro
+      - ./output:/app/output
+      - ./review:/app/review
+      - ./tmp:/app/tmp
+      - ./templates:/app/templates:ro
+      - ./scripts:/app/scripts:ro
+    restart: unless-stopped

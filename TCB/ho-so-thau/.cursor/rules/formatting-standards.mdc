@@ -1,0 +1,182 @@
+---
+description: Formatting standards for Word, Excel, and PowerPoint output files
+globs:
+alwaysApply: true
+---
+
+# Formatting Standards
+
+## Word (.docx) Standards
+
+### Typography
+- Body text: Times New Roman, 13pt
+- Heading 1: Times New Roman Bold, 16pt, UPPERCASE
+- Heading 2: Times New Roman Bold, 14pt
+- Heading 3: Times New Roman Bold Italic, 13pt
+- Table text: Times New Roman, 11pt
+- Footer/Header: Times New Roman, 10pt
+
+### Layout
+- Paper: A4 (210mm x 297mm)
+- Margins: Left 3cm, Right 2cm, Top 2cm, Bottom 2cm
+- Line spacing: 1.5
+- Paragraph spacing: 6pt after
+- Heading numbering: 1. / 1.1. / 1.1.1. format
+- Page numbers in footer (center)
+- Document title in header (right-aligned)
+
+### Tables
+- All borders visible (single line, 0.5pt)
+- Header row: bold, dark blue background (#1F4E79), white text
+- Alternating row colors: white / light gray (#F2F2F2)
+- Cell padding: 2mm all sides
+- Text alignment: left for text, right for numbers, center for headers
+
+### Table of Contents
+- Auto-generated from headings
+- Include H1, H2, H3 levels
+- Right-aligned page numbers with dot leaders
+
+### Images
+- Max width: 15cm (within margins)
+- Centered horizontally
+- Caption below: italic, 10pt, "Hình X.Y: Description"
+- 6pt spacing before and after
+
+## Excel (.xlsx) Standards
+
+### Header Row
+- Font: Calibri Bold, 11pt
+- Background: dark blue (#1F4E79)
+- Text color: white
+- Frozen panes: freeze top row
+- Auto-filter enabled
+
+### Data Formatting
+- Body font: Calibri, 11pt
+- Currency: #,##0 VND or $#,##0.00
+- Dates: dd/mm/yyyy
+- Percentages: 0.0%
+- Numbers: #,##0 (thousands separator)
+- Negative numbers: red text
+
+### Layout
+- Column widths: auto-fit with minimum 12 characters
+- Row height: auto-fit with minimum 20px
+- Sheet names: descriptive, no special characters, max 31 chars
+- Print area: set for all data ranges
+- Page setup: landscape for wide tables, portrait for narrow
+
+### Formulas
+- Prefer formulas over hardcoded values
+- Use named ranges for complex references
+- Color conventions: blue text for input cells, black for formulas
+- Validate no #REF!, #DIV/0!, #VALUE!, #NAME? errors
+
+### Conditional Formatting
+- Red background for negative values
+- Green background for positive targets met
+- Yellow background for warnings/near-threshold
+
+## PowerPoint (.pptx) Standards
+
+### Slide Layout
+- Dimensions: 16:9 widescreen (33.867cm x 19.05cm)
+- Consistent margins: 1.5cm all sides
+
+### Typography
+- Title font: Calibri Bold, 28pt
+- Subtitle: Calibri, 20pt
+- Body text: Calibri, 18pt
+- Bullet points: Calibri, 16pt
+- Footnotes: Calibri, 10pt
+- Maximum 6 bullet points per slide
+- Maximum 8 words per bullet
+
+### Slides Structure
+- Title slide: company logo, title, subtitle, date, author
+- Agenda slide (slide 2)
+- Content slides
+- Q&A / Thank You slide (last)
+- Slide numbers in footer (all slides except title)
+
+### Images & Diagrams
+- Centered on slide
+- Maximum 80% of slide area
+- Minimum 20px padding from edges
+- Caption below if needed: 12pt, italic
+
+### Speaker Notes
+- Required for every content slide
+- Include talking points, data sources, context
+- No more than 200 words per slide
+
+## Review Tracking Standards
+
+### Word (.docx) Review Tracking
+
+1. **Inline Comments** at changed/added content:
+   - Format: "[PHASE N] [Author/Model] - [Description]"
+   - Example: "[PHASE 1] Steve/Opus 4.6 - Created from input/requirements.pdf page 3"
+
+2. **Highlighted Changed Text**:
+   - NEW text: LIGHT GREEN highlight (#E2EFDA)
+   - MODIFIED text: YELLOW highlight (#FFF2CC)
+   - TEMPLATE text (unchanged): no highlight
+
+3. **Section-Level Update Markers** (REVIEW version only):
+   - After each section heading, add italic gray text (9pt):
+     "Updated by [Author] using [Model] on [Date] | Phase [N]"
+
+4. **Change Log Page** (last page before appendix):
+   - Table: Section | Change Type | Description | Author | Model | Date
+   - Change types: NEW, MODIFIED, REFORMATTED, FIXED
+   - Summary row at top: "Total: X new, Y modified, Z fixes"
+
+### Excel (.xlsx) Review Tracking
+
+1. **Audit Columns** (rightmost 3 columns of every data sheet):
+   - _Status: NEW / MODIFIED / UNCHANGED / FIXED
+   - _Change_Desc: what changed in this row
+   - _Updated_By: Author / Model / Date
+
+2. **Row Color Coding**:
+   - GREEN (#E2EFDA): NEW rows
+   - YELLOW (#FFF2CC): MODIFIED rows
+   - WHITE: UNCHANGED rows
+
+3. **_Change_Log Sheet** (separate sheet):
+   - Columns: Sheet | Cell/Row | Change Type | Old Value | New Value | Description | Author | Date
+   - Summary at top: "Total: X new rows, Y modified cells, Z formula updates"
+
+4. **Cell Comments** on modified cells:
+   - "[Author/Model] Changed from '[old]' to '[new]' - [reason]"
+
+### PowerPoint (.pptx) Review Tracking
+
+1. **Speaker Notes Change Tracking** (prepended to notes):
+   ```
+   --- CHANGES (Phase N) ---
+   [Author] / [Model] / [Date]
+   - Added: [what]
+   - Modified: [what]
+   - Source: [input file]
+   ---
+   [actual speaker notes follow]
+   ```
+
+2. **Slide Footer Annotation** (REVIEW version only):
+   - Small text (8pt, gray) at bottom-left of modified slides:
+     "Modified by [Author] | Phase [N] | [Date]"
+
+3. **Change Summary Slide** (last slide before Q&A):
+   - Title: "Document Change Log"
+   - Table: Slide # | Change Type | Description | Author | Date
+
+### Dual-Version Output
+
+Every output file has TWO versions:
+- `filename_REVIEW.ext` - Full tracking for internal review
+- `filename.ext` - Clean for client delivery
+
+Agent creates REVIEW version first, then runs strip_tracking.py for CLEAN version.
