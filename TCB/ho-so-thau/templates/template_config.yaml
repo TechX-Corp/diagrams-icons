@@ -1,0 +1,159 @@
+# Template Configuration
+# Maps placeholders to descriptions for all document formats
+
+# Shared placeholders (used across all formats)
+shared_placeholders:
+  company_name:
+    description: "Company legal name"
+    required: true
+  project_name:
+    description: "Project title"
+    required: true
+  date:
+    description: "Document date (dd/mm/yyyy)"
+    required: true
+  author_name:
+    description: "Author name"
+    source: "config.yaml"
+  version:
+    description: "Document version number"
+    default: "1.0"
+
+# Word-specific templates
+word:
+  proposal_template:
+    file: "templates/word/proposal_template.docx"
+    placeholders:
+      executive_summary:
+        description: "Executive summary text (2-3 paragraphs)"
+        required: true
+      company_profile:
+        description: "Company profile / introduction"
+      understanding:
+        description: "Understanding of requirements"
+      technical_solution:
+        description: "Technical solution details"
+      timeline:
+        description: "Implementation timeline description"
+      team_description:
+        description: "Project team overview"
+    image_placeholders:
+      architecture_diagram:
+        width_inches: 6.0
+        location: "After heading 'Kiến trúc hệ thống' or 'Technical Architecture'"
+        source: "code"  # Phase 1: MCP generate_diagram()
+      company_logo:
+        width_inches: 2.0
+        location: "Cover page top-right"
+        source: "file"
+        path: "input/logo.png"
+    list_placeholders:
+      team_members:
+        description: "Team member rows in table"
+        fields: ["name", "role", "experience", "certification"]
+
+  technical_report_template:
+    file: "templates/word/technical_report_template.docx"
+    placeholders:
+      executive_summary:
+        description: "Executive summary"
+        required: true
+      background:
+        description: "Background and context"
+      methodology:
+        description: "Methodology used"
+      findings:
+        description: "Key findings and analysis"
+      recommendations:
+        description: "Recommendations"
+    image_placeholders:
+      system_diagram:
+        width_inches: 6.0
+        location: "After heading 'System Architecture'"
+        source: "code"
+
+# Excel-specific templates
+excel:
+  pricing_template:
+    file: "templates/excel/pricing_template.xlsx"
+    placeholders:
+      items:
+        description: "Line items for pricing"
+        type: "row_replication"
+        sheet: "Item Breakdown"
+        start_row: 3
+        fields: ["item_name", "description", "quantity", "unit", "unit_price", "total"]
+      total_formula:
+        description: "Auto-calculated, do not fill"
+        type: "formula"
+    list_data:
+      items:
+        sheet: "Item Breakdown"
+        start_row: 3
+        columns:
+          A: "item_name"
+          B: "description"
+          C: "quantity"
+          D: "unit"
+          E: "unit_price"
+          F: "total"
+
+  data_report_template:
+    file: "templates/excel/data_report_template.xlsx"
+    placeholders:
+      kpi_values:
+        description: "KPI metrics for dashboard"
+        sheet: "Dashboard"
+      raw_data:
+        description: "Source data rows"
+        type: "row_replication"
+        sheet: "Raw Data"
+        start_row: 2
+
+# PowerPoint-specific templates
+pptx:
+  presentation_template:
+    file: "templates/pptx/presentation_template.pptx"
+    placeholders:
+      title:
+        description: "Presentation title"
+        slide: 0
+      subtitle:
+        description: "Subtitle / company name"
+        slide: 0
+      agenda_items:
+        description: "Agenda bullet points"
+        slide: 1
+      key_highlights:
+        description: "Key highlights (3-5 bullets)"
+        slide: 2
+      key_metrics:
+        description: "Key metrics data"
+        slide: 5
+    image_placeholders:
+      architecture_diagram:
+        slide: 3
+        position: "centered"
+        width_inches: 8.0
+        source: "code"
+      process_flow:
+        slide: 4
+        position: "centered"
+        width_inches: 8.0
+        source: "gemini"
+
+  executive_brief_template:
+    file: "templates/pptx/executive_brief_template.pptx"
+    placeholders:
+      title:
+        description: "Brief title"
+        slide: 0
+      key_points:
+        description: "Key highlights (3-4 bullets max)"
+        slide: 1
+      investment_summary:
+        description: "Cost / investment data"
+        slide: 3
+      next_steps:
+        description: "Recommended next steps"
+        slide: 4
