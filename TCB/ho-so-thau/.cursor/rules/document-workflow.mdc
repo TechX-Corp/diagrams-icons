@@ -53,6 +53,36 @@ When generating handoff files:
 4. Save to tmp/handoff/phaseXX.md
 5. Archive previous handoff to tmp/handoff/history/
 
+## File Update Strategy
+
+**CRITICAL: In-Place Updates by Default**
+
+When updating documents, follow this strategy:
+1. **Phase 1 (Create)**: Generate `output/{filename}_REVIEW.{ext}` (first version)
+2. **Phase 3 (Fix)**: Update SAME file in-place (overwrite `output/{filename}_REVIEW.{ext}`)
+3. **Phase 3 (Iterations)**: Continue updating SAME file (never create new versions)
+4. **Phase 4 (Finalize)**: Generate `output/{filename}.{ext}` (clean version only)
+
+**Version Snapshots (Optional)**
+Only create new versions when user explicitly requests:
+- User says: "Save current version before changes"
+- Agent copies: `output/{filename}_REVIEW.{ext}` → `output/{filename}_v{N}_REVIEW.{ext}`
+- Then continues working on original: `output/{filename}_REVIEW.{ext}`
+
+**Git Commits Track History**
+Every phase ends with a git commit → full change history preserved
+No need for multiple file versions unless explicitly requested
+
+**Never**:
+- ❌ Create `output/proposal_v1.docx`, `output/proposal_v2.docx` automatically
+- ❌ Append timestamps like `output/proposal_2025-02-09.docx`
+- ❌ Keep old versions in output/ (use git history instead)
+
+**Always**:
+- ✅ Update the SAME `_REVIEW` file across iterations
+- ✅ User always knows which file to open (no confusion)
+- ✅ output/ folder stays clean
+
 ## Available Tools Reference
 
 ### Reading & Extraction
