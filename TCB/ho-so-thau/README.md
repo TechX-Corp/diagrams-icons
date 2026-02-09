@@ -27,6 +27,8 @@ Every output file is generated in **two versions**:
 
 ## Quick Start
 
+### Solo Work
+
 1. **Place your input files** in the `input/` folder (or reference them with `@file` paths)
 2. **Open Cursor**, select **Opus 4.6**, and type your request:
    ```
@@ -37,7 +39,32 @@ Every output file is generated in **two versions**:
    Execute @tmp/handoff/phaseXX.md
    ```
 
-That's it! The Agent handles all scripts, formatting, tracking, and file management automatically.
+### Team Collaboration
+
+When multiple team members work on the same project:
+
+1. **Before starting work**:
+   ```bash
+   git pull  # Get latest changes
+   ./scripts/check_locks.sh  # Check if document is locked
+   ```
+
+2. **Lock the document** (Agent does this automatically when you start a phase):
+   ```bash
+   ./scripts/lock_document.sh output/proposal_REVIEW.docx "Your Name" "Phase 3"
+   git add .locks/ && git commit -m "chat: Lock proposal for editing" && git push
+   ```
+
+3. **Work on your phase** - The lock tells other team members to wait
+
+4. **Unlock when done** (Agent does this automatically at phase end):
+   ```bash
+   git add output/ .locks/ && git commit -m "chat: Complete Phase 3 + unlock" && git push
+   ```
+
+**Result**: No merge conflicts with binary files (Word/Excel/PPT), clear ownership, smooth handoffs between team members.
+
+That's it! The Agent handles all scripts, formatting, tracking, lock management, and file management automatically.
 
 ## Setup
 

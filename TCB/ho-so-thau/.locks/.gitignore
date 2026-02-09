@@ -1,0 +1,4 @@
+# Lock files are committed to track active editors
+# But we ignore temporary files
+*.tmp
+*.swp

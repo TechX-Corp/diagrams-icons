@@ -83,6 +83,72 @@ No need for multiple file versions unless explicitly requested
 - ✅ User always knows which file to open (no confusion)
 - ✅ output/ folder stays clean
 
+## Team Collaboration with Document Locks
+
+**CRITICAL: Check and Create Locks Before Editing**
+
+### Before Starting Any Phase
+
+1. **Pull latest changes**:
+   ```bash
+   git pull
+   ```
+
+2. **Check for active locks**:
+   ```bash
+   ./scripts/check_locks.sh
+   ```
+   - If document is locked → coordinate with team member or wait
+   - If available → proceed to step 3
+
+3. **Create lock** (Agent does this automatically):
+   ```bash
+   ./scripts/lock_document.sh output/proposal_REVIEW.docx "Your Name" "Phase 3"
+   git add .locks/
+   git commit -m "chat: Lock proposal_REVIEW.docx for editing"
+   git push
+   ```
+
+### During Work
+
+- Work on the document as normal
+- Lock file tells others: "I'm editing this, please wait"
+- Multiple commits on document are OK (lock stays active)
+
+### After Completing Phase
+
+1. **Commit document changes**:
+   ```bash
+   git add output/proposal_REVIEW.docx
+   git commit -m "chat: Complete Phase 3 - Updated proposal sections 1-5"
+   git push
+   ```
+
+2. **Release lock** (Agent does this automatically):
+   ```bash
+   ./scripts/unlock_document.sh output/proposal_REVIEW.docx
+   git add .locks/
+   git commit -m "chat: Unlock proposal_REVIEW.docx"
+   git push
+   ```
+
+3. **Notify team** (optional):
+   - Slack/Teams message: "Proposal REVIEW version ready for Phase 2"
+
+### Lock Override (Emergency)
+
+If lock is stale (person forgot to unlock, left team, etc.):
+1. Coordinate with team in chat/Slack
+2. Manually remove: `rm .locks/proposal_REVIEW.docx.lock`
+3. Commit: `git commit -m "chat: Override stale lock for proposal_REVIEW.docx"`
+
+### Agent Auto-Locking Behavior
+
+**Phase 1 (Create)**: Agent creates lock at START, releases at END
+**Phase 3 (Fix)**: Agent creates lock at START, releases at END
+**Phase 2 (Review)**: No lock needed (read-only)
+**Phase 4 (Finalize)**: No lock needed (creates new clean file)
+
 ## Available Tools Reference
 
 ### Reading & Extraction
