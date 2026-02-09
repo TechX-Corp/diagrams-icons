@@ -72,6 +72,7 @@ MCP (Model Context Protocol) servers extend Cursor's capabilities. You need to c
   - [ ] `document-loader-mcp-server` - Reads PDF, Word, Excel, PowerPoint files
   - [ ] `markitdown` - Converts documents to markdown format
   - [ ] `aws-diagram-mcp-server` - Generates architecture diagrams
+  - [ ] `Atlassian-MCP-Server` - Reads Confluence pages (optional - for Confluence input)
 
 - [ ] **If servers are missing**, add them to your Cursor MCP settings:
   ```json
@@ -88,12 +89,21 @@ MCP (Model Context Protocol) servers extend Cursor's capabilities. You need to c
       "aws-diagram-mcp-server": {
         "command": "npx",
         "args": ["-y", "@aws-diagram-mcp/server"]
+      },
+      "Atlassian-MCP-Server": {
+        "url": "https://mcp.atlassian.com/v1/mcp"
       }
     }
   }
   ```
 
 - [ ] **Restart Cursor** after adding MCP servers
+
+- [ ] **Authenticate Atlassian MCP (first use only)**:
+  - First time you use a Confluence tool, Cursor will open your browser
+  - Log in to your Atlassian Cloud account (OAuth 2.0)
+  - Authorize Cursor to access your Confluence pages
+  - No API tokens needed - OAuth handles everything securely
 
 ## 5. Verify Cursor Rules are Loaded
 

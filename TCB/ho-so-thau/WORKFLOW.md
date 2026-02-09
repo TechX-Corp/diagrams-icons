@@ -196,6 +196,40 @@ Create a project report package from input/project_data.xlsx:
 Ensure all three formats reference the same data sources and maintain consistency.
 ```
 
+### Confluence Input Prompts
+
+#### Fetch from Confluence URL (Direct MCP)
+```
+Read Confluence page https://yourcompany.atlassian.net/wiki/spaces/TEAM/pages/12345/Requirements 
+and all child pages. Create a technical report using templates/word/technical_report_template.docx. 
+Save to output/
+```
+
+#### Pre-Fetch for Offline Processing
+```
+# Step 1: Pre-fetch in terminal (or via Cursor Shell tool)
+python scripts/confluence_fetcher.py \
+  --url "https://yourcompany.atlassian.net/wiki/spaces/TEAM/pages/12345/Project-Docs" \
+  --output input/confluence/
+
+# Step 2: Process in Cursor chat
+Read all pages from input/confluence/ (Confluence pages pre-fetched). 
+Create a proposal using templates/word/proposal_template.docx.
+```
+
+#### Update Document from Confluence Changes
+```
+The "Technical Requirements" page (ID: 12400) was updated in Confluence. 
+Re-fetch and update section 3 of output/proposal_REVIEW.docx to match the 
+latest content from https://yourcompany.atlassian.net/wiki/pages/12400
+```
+
+#### Search Confluence Space
+```
+Search Confluence space "TEAM" for pages about "architecture" and "deployment". 
+Create a summary document with findings using templates/word/technical_report_template.docx.
+```
+
 ### Partial Update Prompts
 
 #### Update by Heading

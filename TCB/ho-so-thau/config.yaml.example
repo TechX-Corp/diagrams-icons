@@ -18,3 +18,12 @@ models:
 branding:
   company_name: "Your Company"
   logo_path: "input/logo.png"  # optional
+
+# Confluence integration (optional - for pre-fetch script)
+confluence:
+  site: "yourcompany.atlassian.net"  # Your Atlassian Cloud site
+  default_space: "TEAM"  # Default space key
+  # API token fallback (if not using Rovo MCP OAuth)
+  # Only needed if using confluence_fetcher.py script
+  # email: "your.email@company.com"
+  # api_token: "your-api-token"

@@ -64,6 +64,13 @@ When generating handoff files:
 - Skill: spreadsheet - Auto-triggers for .xlsx tasks
 - Script: scripts/extract_images.py - Extract images from docx/pdf
 
+### Confluence Integration (optional)
+- MCP `getConfluencePage(pageId)` - Get Confluence page by ID (body as Markdown)
+- MCP `getConfluencePageDescendants(pageId)` - List ALL descendant pages under a parent
+- MCP `searchConfluenceUsingCql(cql)` - Search via CQL query
+- MCP `getPagesInConfluenceSpace(spaceKey)` - List pages in a space
+- Script: scripts/confluence_fetcher.py - Pre-fetch pages to input/confluence/
+
 ### Diagram Generation
 - MCP `generate_diagram(code)` - Architecture/flow/sequence diagrams
 - Skill: generate-architecture-diagrams - AWS/Azure/GCP + Draw.io
@@ -102,11 +109,43 @@ Every document modification must record:
 
 ### Step 1: Analyze Input
 - Scan input/ folder OR read @referenced files
+- **Confluence input**: If user provides Confluence URL or page ID, use Confluence MCP tools
 - Use MCP read_document() for content preview
 - Use convert_to_markdown() for structured view
 - Run extract_images.py to pull images from docx/pdf into tmp/images/
 - Use read_image() to view extracted images and understand their content
 - Summarize available data AND images per file
+
+### Step 1a: Confluence Input (when applicable)
+When user provides a Confluence URL or mentions Confluence pages:
+
+1. **Extract page ID** from URL pattern:
+   `https://{site}.atlassian.net/wiki/spaces/{space}/pages/{pageId}/{title}`
+   
+2. **Fetch parent page**:
+   - Call `getConfluencePage(pageId)` to read the parent page content
+   - Content is returned as Markdown (body.storage.value)
+   
+3. **Fetch descendant pages** (if user wants child pages):
+   - Call `getConfluencePageDescendants(pageId)` to list ALL children recursively
+   - Returns array of page objects with id, title, parentId
+   
+4. **Fetch each child page**:
+   - For each descendant, call `getConfluencePage(childId)` to get content
+   - Build content hierarchy based on parentId relationships
+   
+5. **Process Confluence content**:
+   - Map Confluence page titles to document section headings
+   - Use page hierarchy to determine section nesting in output document
+   - Extract images from Confluence HTML (if any) to tmp/images/
+   - Process content as if reading from input/ files
+
+**Alternative: Pre-fetched Confluence pages**:
+If user ran `scripts/confluence_fetcher.py` beforehand:
+1. Read `input/confluence/manifest.json` for page hierarchy
+2. Read each `.html` file referenced in manifest
+3. Load attachments from `input/confluence/attachments/`
+4. Use manifest depth info to organize content into sections
 
 ### Step 2: Identify Document Type
 - Check if user specified a template

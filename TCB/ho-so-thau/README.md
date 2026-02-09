@@ -377,6 +377,64 @@ When updating multiple slides:
 
 ---
 
+### Confluence Pages -- Reference by URL or Page ID
+
+When working with Confluence as an input source:
+
+#### By URL (with all child pages)
+
+```
+"Read Confluence page https://yourcompany.atlassian.net/wiki/spaces/TEAM/pages/12345/Requirements 
+ and all child pages. Create a proposal using @templates/word/proposal_template.docx"
+```
+
+#### By Page ID
+
+```
+"Read Confluence page 12345 and all descendants. Extract technical requirements 
+ and create a technical report."
+```
+
+#### By Page ID (parent only, no children)
+
+```
+"Read only Confluence page 12345 (no children). Use content to update 
+ section 3 of @output/proposal_REVIEW.docx"
+```
+
+#### By Space Key
+
+```
+"Search Confluence space 'TEAM' for pages containing 'architecture' and 'deployment'. 
+ Summarize findings in a technical report."
+```
+
+#### By CQL (Confluence Query Language)
+
+```
+"Search Confluence using CQL: type=page AND space=TEAM AND title~'requirements' AND lastModified > now('-7d')
+ Create a summary document with recently updated requirements pages."
+```
+
+#### Update from Confluence Page
+
+```
+"Page 'Technical Requirements' (ID: 12400) in Confluence was updated. 
+ Re-fetch and update section 3.2 of @output/proposal_REVIEW.docx to match 
+ https://yourcompany.atlassian.net/wiki/pages/12400"
+```
+
+#### Pre-Fetched Confluence Pages
+
+If you used `scripts/confluence_fetcher.py` to pre-fetch:
+
+```
+"Read all pages from @input/confluence/ (see manifest.json for hierarchy). 
+ Create a proposal using page hierarchy as document structure."
+```
+
+---
+
 ### Cross-Document References
 
 When updating multiple documents that must stay consistent:
