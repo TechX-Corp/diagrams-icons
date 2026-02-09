@@ -81,21 +81,30 @@ class ConfluenceFetcher:
 
     def get_page(self, page_id: str) -> Optional[Dict]:
         """
-        Get page content by ID.
+        Get page content by ID with body.
+        
+        According to Confluence API v2 docs, body content is NOT included
+        in the default /pages/{id} response. We need to get it separately
+        via /pages/{id}?body-format=storage (which returns body in the response).
         
         Returns:
             Page data dict with id, title, body, version, etc.
         """
+        # First get basic page info
         url = f"{self.base_url}/pages/{page_id}"
-        params = {
-            "body-format": "storage",  # HTML format
-            "include-labels": "true"
-        }
         
         try:
-            response = self.session.get(url, params=params)
+            response = self.session.get(url, params={"body-format": "storage"})
             response.raise_for_status()
-            return response.json()
+            data = response.json()
+            
+            # The body should be in the response when body-format param is used
+            # Structure: data["body"]["storage"]["value"]
+            if "body" not in data:
+                print(f"Warning: Page {page_id} ({data.get('title', 'Untitled')}) returned no body content")
+                print(f"  Response keys: {list(data.keys())}")
+            
+            return data
         except requests.exceptions.RequestException as e:
             print(f"Error fetching page {page_id}: {e}")
             return None
@@ -344,8 +353,18 @@ def main():
     else:
         descendants = []
     
+    # Fetch full body for each descendant (children API doesn't include body)
+    descendants_with_body = []
+    for desc in descendants:
+        full_page = fetcher.get_page(desc["id"])
+        if full_page:
+            full_page["depth"] = desc.get("depth", 1)
+            descendants_with_body.append(full_page)
+        else:
+            descendants_with_body.append(desc)
+    
     # Build page list
-    all_pages = [parent_page] + descendants
+    all_pages = [parent_page] + descendants_with_body
     
     # Add depth to parent
     parent_page["depth"] = 0
