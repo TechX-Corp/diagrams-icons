@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aiops-platform/schemas/event.schema.json",
+  "title": "Event",
+  "type": "object",
+  "required": ["event_id", "source_system", "timestamp", "severity", "event_type", "title"],
+  "properties": {
+    "event_id": { "type": "string" },
+    "source_system": { "type": "string" },
+    "source_event_id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "entity_ref": { "type": "string" },
+    "severity": { "type": "string", "enum": ["critical", "high", "medium", "low", "info"] },
+    "event_type": { "type": "string", "enum": ["metric_threshold", "log_pattern", "state_change", "trap", "alert", "deployment", "audit", "custom"] },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "raw_payload": { "type": "object" },
+    "tags": { "type": "array", "items": { "type": "string" } }
+  }
+}

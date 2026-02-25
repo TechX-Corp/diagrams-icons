@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aiops-platform/schemas/change_event.schema.json",
+  "title": "ChangeEvent",
+  "description": "Standardized representation of a CI/CD deployment or configuration change.",
+  "type": "object",
+  "required": ["change_id", "source_system", "service_canonical_id", "environment", "version", "timestamp_start", "status"],
+  "properties": {
+    "change_id": { "type": "string", "description": "Unique change identifier" },
+    "source_system": {
+      "type": "string",
+      "enum": ["jenkins", "gitlab_ci", "github_actions", "argocd", "azure_devops", "custom"],
+      "description": "CI/CD system that produced this change"
+    },
+    "source_change_id": { "type": "string", "description": "Native ID in the source CI/CD system" },
+    "service_canonical_id": { "type": "string", "description": "Canonical ID of the service being deployed" },
+    "environment": {
+      "type": "string",
+      "enum": ["dev", "staging", "production", "canary"],
+      "description": "Target deployment environment"
+    },
+    "version": { "type": "string", "description": "Version being deployed (semver, git SHA, image tag)" },
+    "previous_version": { "type": "string", "description": "Version before this deployment" },
+    "timestamp_start": { "type": "string", "format": "date-time" },
+    "timestamp_end": { "type": "string", "format": "date-time" },
+    "actor": { "type": "string", "description": "User or automation that triggered the change" },
+    "pipeline": { "type": "string", "description": "Pipeline name or identifier" },
+    "status": {
+      "type": "string",
+      "enum": ["started", "succeeded", "failed", "rolled_back"],
+      "description": "Current deployment status"
+    },
+    "commit_sha": { "type": "string" },
+    "commit_message": { "type": "string" },
+    "affected_entities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Canonical IDs of entities affected by this change"
+    },
+    "metadata": { "type": "object", "description": "Free-form plugin-specific metadata" }
+  }
+}

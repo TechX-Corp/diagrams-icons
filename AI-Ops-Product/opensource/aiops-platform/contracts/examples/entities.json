@@ -1,0 +1,104 @@
+[
+  {
+    "canonical_id": "ent:application:web-app",
+    "entity_type": "application",
+    "display_name": "E-Commerce Web Application",
+    "source_refs": [{"source_system": "dynatrace", "native_id": "APPLICATION-WEB001"}],
+    "attributes": {"technology": "React", "team": "frontend"},
+    "tags": ["env:prod", "tier:frontend"],
+    "first_seen": "2026-01-01T00:00:00Z",
+    "last_seen": "2026-02-25T12:00:00Z",
+    "confidence_score": 1.0,
+    "lifecycle_state": "active"
+  },
+  {
+    "canonical_id": "ent:service:api-service",
+    "entity_type": "service",
+    "display_name": "API Service",
+    "source_refs": [{"source_system": "dynatrace", "native_id": "SERVICE-API001"}],
+    "attributes": {"technology": "Python/FastAPI", "team": "backend"},
+    "tags": ["env:prod", "tier:api"],
+    "first_seen": "2026-01-01T00:00:00Z",
+    "last_seen": "2026-02-25T12:00:00Z",
+    "confidence_score": 1.0,
+    "lifecycle_state": "active"
+  },
+  {
+    "canonical_id": "ent:pod:api-pod-1",
+    "entity_type": "pod",
+    "display_name": "api-service-pod-7d9f8b",
+    "source_refs": [{"source_system": "dynatrace", "native_id": "POD-API001"}],
+    "attributes": {"namespace": "production", "node": "k8s-node-1"},
+    "tags": ["env:prod"],
+    "first_seen": "2026-02-20T00:00:00Z",
+    "last_seen": "2026-02-25T12:00:00Z",
+    "confidence_score": 1.0,
+    "lifecycle_state": "active"
+  },
+  {
+    "canonical_id": "ent:host:k8s-node-1",
+    "entity_type": "host",
+    "display_name": "k8s-node-1.dc1.example.com",
+    "source_refs": [
+      {"source_system": "dynatrace", "native_id": "HOST-NODE001"},
+      {"source_system": "solarwinds", "native_id": "node:2001"}
+    ],
+    "attributes": {"os": "Ubuntu 22.04", "cpu_cores": 16, "memory_gb": 64, "ip": "10.1.1.10"},
+    "tags": ["env:prod", "role:k8s-worker"],
+    "first_seen": "2026-01-01T00:00:00Z",
+    "last_seen": "2026-02-25T12:00:00Z",
+    "confidence_score": 0.95,
+    "lifecycle_state": "active"
+  },
+  {
+    "canonical_id": "ent:database:postgres-primary",
+    "entity_type": "database",
+    "display_name": "postgres-primary (orders-db)",
+    "source_refs": [{"source_system": "dynatrace", "native_id": "SERVICE-DB001"}],
+    "attributes": {"engine": "PostgreSQL 15", "port": 5432, "database": "orders"},
+    "tags": ["env:prod", "tier:data"],
+    "first_seen": "2026-01-01T00:00:00Z",
+    "last_seen": "2026-02-25T12:00:00Z",
+    "confidence_score": 1.0,
+    "lifecycle_state": "active"
+  },
+  {
+    "canonical_id": "ent:vm:postgres-host",
+    "entity_type": "vm",
+    "display_name": "postgres-host-01.dc1.example.com",
+    "source_refs": [
+      {"source_system": "dynatrace", "native_id": "HOST-PGHOST01"},
+      {"source_system": "solarwinds", "native_id": "node:2010"}
+    ],
+    "attributes": {"os": "RHEL 8", "cpu_cores": 8, "memory_gb": 32, "ip": "10.1.2.20"},
+    "tags": ["env:prod", "role:database"],
+    "first_seen": "2026-01-01T00:00:00Z",
+    "last_seen": "2026-02-25T12:00:00Z",
+    "confidence_score": 0.97,
+    "lifecycle_state": "active"
+  },
+  {
+    "canonical_id": "ent:network_device:core-switch-1",
+    "entity_type": "network_device",
+    "display_name": "core-switch-1.dc1",
+    "source_refs": [{"source_system": "solarwinds", "native_id": "node:1001"}],
+    "attributes": {"vendor": "Cisco", "model": "Nexus 9300", "ip": "10.1.0.1"},
+    "tags": ["env:prod", "role:core-network"],
+    "first_seen": "2026-01-01T00:00:00Z",
+    "last_seen": "2026-02-25T12:00:00Z",
+    "confidence_score": 1.0,
+    "lifecycle_state": "active"
+  },
+  {
+    "canonical_id": "ent:load_balancer:lb-1",
+    "entity_type": "load_balancer",
+    "display_name": "prod-lb-01",
+    "source_refs": [{"source_system": "dynatrace", "native_id": "HOST-LB001"}],
+    "attributes": {"type": "L7", "vendor": "NGINX", "ip": "10.1.0.100"},
+    "tags": ["env:prod", "tier:edge"],
+    "first_seen": "2026-01-01T00:00:00Z",
+    "last_seen": "2026-02-25T12:00:00Z",
+    "confidence_score": 1.0,
+    "lifecycle_state": "active"
+  }
+]

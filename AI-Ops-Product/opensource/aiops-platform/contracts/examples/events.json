@@ -1,0 +1,80 @@
+[
+  {
+    "event_id": "evt-001",
+    "source_system": "dynatrace",
+    "source_event_id": "DT-PROB-2026022501",
+    "timestamp": "2026-02-25T11:30:00Z",
+    "entity_ref": "ent:vm:postgres-host",
+    "severity": "critical",
+    "event_type": "metric_threshold",
+    "title": "High CPU usage on postgres-host-01 (95%)",
+    "description": "CPU usage exceeded 90% threshold for 5 minutes on postgres-host-01.dc1.example.com",
+    "raw_payload": {"metric": "cpu.usage", "value": 95.2, "threshold": 90},
+    "tags": ["cpu", "performance"]
+  },
+  {
+    "event_id": "evt-002",
+    "source_system": "splunk",
+    "source_event_id": "SPL-ALERT-88001",
+    "timestamp": "2026-02-25T11:32:00Z",
+    "entity_ref": "ent:service:api-service",
+    "severity": "critical",
+    "event_type": "log_pattern",
+    "title": "Connection pool exhaustion on API Service",
+    "description": "PostgreSQL connection pool exhausted: 0/20 connections available. Queries timing out.",
+    "raw_payload": {"log_source": "api-service", "pattern": "connection pool exhausted"},
+    "tags": ["database", "connection-pool"]
+  },
+  {
+    "event_id": "evt-003",
+    "source_system": "dynatrace",
+    "source_event_id": "DT-PROB-2026022502",
+    "timestamp": "2026-02-25T11:33:00Z",
+    "entity_ref": "ent:service:api-service",
+    "severity": "high",
+    "event_type": "metric_threshold",
+    "title": "High response time on API Service (P95: 8500ms)",
+    "description": "API Service response time P95 exceeded 5000ms threshold",
+    "raw_payload": {"metric": "response_time_p95", "value": 8500, "threshold": 5000},
+    "tags": ["latency", "performance"]
+  },
+  {
+    "event_id": "evt-004",
+    "source_system": "dynatrace",
+    "source_event_id": "DT-PROB-2026022503",
+    "timestamp": "2026-02-25T11:35:00Z",
+    "entity_ref": "ent:application:web-app",
+    "severity": "high",
+    "event_type": "alert",
+    "title": "Slow page load on E-Commerce Web Application",
+    "description": "User-facing page load times exceeded 10s. Error rate increasing.",
+    "raw_payload": {"metric": "page_load_time", "value": 12000},
+    "tags": ["user-experience", "latency"]
+  },
+  {
+    "event_id": "evt-005",
+    "source_system": "solarwinds",
+    "source_event_id": "SW-EVT-55001",
+    "timestamp": "2026-02-25T11:28:00Z",
+    "entity_ref": "ent:network_device:core-switch-1",
+    "severity": "low",
+    "event_type": "metric_threshold",
+    "title": "Minor packet loss on core-switch-1 Eth1/2",
+    "description": "0.5% packet loss detected on interface Eth1/2 (connected to postgres-host)",
+    "raw_payload": {"metric": "packet_loss_pct", "value": 0.5, "interface": "Eth1/2"},
+    "tags": ["network", "packet-loss"]
+  },
+  {
+    "event_id": "evt-006",
+    "source_system": "influxdb",
+    "source_event_id": "INFLUX-ALERT-001",
+    "timestamp": "2026-02-25T11:31:00Z",
+    "entity_ref": "ent:database:postgres-primary",
+    "severity": "critical",
+    "event_type": "metric_threshold",
+    "title": "PostgreSQL active connections at maximum (max_connections=100)",
+    "description": "Active connections reached 100/100. New connections being rejected.",
+    "raw_payload": {"metric": "pg_active_connections", "value": 100, "max": 100},
+    "tags": ["database", "connections", "capacity"]
+  }
+]

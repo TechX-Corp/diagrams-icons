@@ -1,0 +1,102 @@
+[
+  {
+    "relation_id": "rel:web-app-depends-api",
+    "source_entity_id": "ent:application:web-app",
+    "target_entity_id": "ent:service:api-service",
+    "relation_type": "depends_on",
+    "source_system": "dynatrace",
+    "confidence": 0.95,
+    "discovered_at": "2026-01-15T00:00:00Z",
+    "properties": {"protocol": "HTTPS"}
+  },
+  {
+    "relation_id": "rel:lb-balances-api",
+    "source_entity_id": "ent:load_balancer:lb-1",
+    "target_entity_id": "ent:service:api-service",
+    "relation_type": "load_balances",
+    "source_system": "dynatrace",
+    "confidence": 0.90,
+    "discovered_at": "2026-01-15T00:00:00Z",
+    "properties": {"port": 443}
+  },
+  {
+    "relation_id": "rel:api-calls-postgres",
+    "source_entity_id": "ent:service:api-service",
+    "target_entity_id": "ent:database:postgres-primary",
+    "relation_type": "calls",
+    "source_system": "dynatrace",
+    "confidence": 0.98,
+    "discovered_at": "2026-01-15T00:00:00Z",
+    "properties": {"port": 5432, "protocol": "tcp"}
+  },
+  {
+    "relation_id": "rel:api-stores-postgres",
+    "source_entity_id": "ent:service:api-service",
+    "target_entity_id": "ent:database:postgres-primary",
+    "relation_type": "stores_data_in",
+    "source_system": "dynatrace",
+    "confidence": 0.98,
+    "discovered_at": "2026-01-15T00:00:00Z",
+    "properties": {}
+  },
+  {
+    "relation_id": "rel:pod-runs-on-node",
+    "source_entity_id": "ent:pod:api-pod-1",
+    "target_entity_id": "ent:host:k8s-node-1",
+    "relation_type": "runs_on",
+    "source_system": "dynatrace",
+    "confidence": 1.0,
+    "discovered_at": "2026-02-20T00:00:00Z",
+    "properties": {}
+  },
+  {
+    "relation_id": "rel:api-member-pod",
+    "source_entity_id": "ent:pod:api-pod-1",
+    "target_entity_id": "ent:service:api-service",
+    "relation_type": "member_of",
+    "source_system": "dynatrace",
+    "confidence": 1.0,
+    "discovered_at": "2026-02-20T00:00:00Z",
+    "properties": {}
+  },
+  {
+    "relation_id": "rel:postgres-runs-on-host",
+    "source_entity_id": "ent:database:postgres-primary",
+    "target_entity_id": "ent:vm:postgres-host",
+    "relation_type": "runs_on",
+    "source_system": "dynatrace",
+    "confidence": 1.0,
+    "discovered_at": "2026-01-15T00:00:00Z",
+    "properties": {}
+  },
+  {
+    "relation_id": "rel:node-connects-switch",
+    "source_entity_id": "ent:host:k8s-node-1",
+    "target_entity_id": "ent:network_device:core-switch-1",
+    "relation_type": "connects_to",
+    "source_system": "solarwinds",
+    "confidence": 0.90,
+    "discovered_at": "2026-01-15T00:00:00Z",
+    "properties": {"protocol": "LLDP", "port": "Eth1/1"}
+  },
+  {
+    "relation_id": "rel:pghost-connects-switch",
+    "source_entity_id": "ent:vm:postgres-host",
+    "target_entity_id": "ent:network_device:core-switch-1",
+    "relation_type": "connects_to",
+    "source_system": "solarwinds",
+    "confidence": 0.90,
+    "discovered_at": "2026-01-15T00:00:00Z",
+    "properties": {"protocol": "LLDP", "port": "Eth1/2"}
+  },
+  {
+    "relation_id": "rel:lb-connects-switch",
+    "source_entity_id": "ent:load_balancer:lb-1",
+    "target_entity_id": "ent:network_device:core-switch-1",
+    "relation_type": "connects_to",
+    "source_system": "solarwinds",
+    "confidence": 0.85,
+    "discovered_at": "2026-01-15T00:00:00Z",
+    "properties": {"protocol": "CDP", "port": "Eth1/3"}
+  }
+]
